@@ -9,5 +9,26 @@
 <body>
     <h1>Hola mundo desde Flask</h1>
 
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Correo</th>
+                <th>Foto</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for empleado in empleados %}
+            <tr>
+                <td>{{ empleado[0] }}}</td>
+                <td>{{ empleado[3] }}}</td>
+                <td>{{ empleado[1] }}}</td>
+                <td>{{ empleado[2] }}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
 </body>
 </html>
