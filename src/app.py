@@ -69,7 +69,16 @@ def delete(id):
 
     return redirect("/")
 
+@app.route('/modify')
+def modify():
+    sql = f'SELECT * FROM empleados WHERE id={id}'
+    conn = mysql.connect()
+    cursor = conn.cursor()
+    cursor.execute(sql)
+    empleado = cursor.fetchone()
+    conn.commit()
 
+    return render_template("empleados/edit.html")
 
 
 if __name__ == "__main__":
