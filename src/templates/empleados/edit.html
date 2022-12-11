@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <title>Document</title>
+</head>
+<body>
+    <form method="post" action="/update" enctype="multipart/form-data">
+        <label for="txtId">ID</label>
+        <input type="text" name="txtId" id="txtId" value="{{ empleado[0] }}" disabled>
+        <br><br>
+        <label for="txtNombre">Nombre:</label>
+        <input type="text" name="txtNombre" id="txtNombre" value="{{ empleado[1] }}">
+        <br><br>
+        <label for="txtCorreo">Correo:</label>
+        <input type="email" name="txtCorreo" id="txtCorreo" value="{{ empleado[2] }}">
+        <br><br>
+        Su foto actual: {{ empleado[3] }}
+        <br><br>
+        <label for="txtFoto">Foto de perfil:</label>
+        <input type="file" name="txtFoto" id="txtFoto" value="{{ empleado[3] }}">
+        <br><br>
+        <input type="submit" value="Modificar empleado">
+    </form>
+</body>
+</html>
