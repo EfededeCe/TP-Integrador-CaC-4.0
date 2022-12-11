@@ -25,6 +25,11 @@
                 <td>{{ empleado[3] }}}</td>
                 <td>{{ empleado[1] }}}</td>
                 <td>{{ empleado[2] }}}</td>
+                <td>
+                    <a href="/modify/{{ empleado[0] }}"> Editar </a>
+                    |
+                    <a href="/delete/{{ empleado[0] }}"> Borrar </a>
+                </td>
             </tr>
             {% endfor %}
         </tbody>
