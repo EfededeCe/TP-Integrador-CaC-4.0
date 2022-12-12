@@ -1,7 +1,7 @@
 # Activar el entorno virtual => source venv/scripts/activate (windows con una bash shell)
 
 from flask import Flask
-from flask import render_template, request, redirect
+from flask import render_template, request, redirect, url_for
 from flaskext.mysql import MySQL
 from datetime import datetime
 import os
@@ -15,7 +15,7 @@ app.config["MYSQL_DATABASE_USER"] = "root"
 app.config["MYSQL_DATABASE_PASSWORD"] = "MyRootCabezones111111!"
 app.config["MYSQL_DATABASE_DB"] = "empleados"
 
-UPLOADS = os.path.join("uploads")
+UPLOADS = os.path.join("src/uploads")
 app.config["UPLOADS"] = UPLOADS
 
 mysql.init_app(app)
@@ -65,9 +65,19 @@ def store():
 
 @app.route('/delete/<int:id>')
 def delete(id):
-    sql = "DELETE FROM empleados WHERE id=%s"
     conn = mysql.connect()
     cursor = conn.cursor()
+
+    sql = f'SELECT foto FROM empleados WHERE id={id}'
+    cursor.execute(sql)
+    nombre_foto = cursor.fetchone()[0]
+
+    try:
+        os.remove(os.path.join(app.config["UPLOADS"], nombre_foto)) # borra la foto en carpeta
+    except:
+        pass
+
+    sql = "DELETE FROM empleados WHERE id=%s" # borra la fila de la DB
     cursor.execute(sql, (id))
     conn.commit()
 
@@ -89,31 +99,35 @@ def update():
     _nombre = request.form["txtNombre"]
     _correo = request.form["txtCorreo"]
     _foto = request.files["txtFoto"]
-    id_ = request.form["txtId"]
-    # id_ = int(id_)
+    id = request.form["txtId"]
+    # id = int(id)
     print("="*20)
-    print(id_)
-
-    sql = f'UPDATE empleados SET nombre="{_nombre}", correo="{_correo}" WHERE id="{id_}"'
-    # datos = (_nombre, _correo, id_)
+    print(id)
 
     conn = mysql.connect()
     cursor = conn.cursor()
 
+    sql = f'UPDATE empleados SET nombre="{_nombre}", correo="{_correo}" WHERE id={id}'
+
     if _foto.filename != "":
         now = datetime.now()
         tiempo = now.strftime("%Y%H%M%S")
-
         nuevo_nombre_foto = tiempo + "_" + _foto.filename
-        _foto.save("uploads/" + nuevo_nombre_foto)
+        _foto.save("src/uploads/" + nuevo_nombre_foto) # guardo la imagen en carpeta
 
-        sql_if = f'SELECT foto FROM empleados WHERE id="{id_}"'
+        sql_if = f'SELECT foto FROM empleados WHERE id="{id}"'
         cursor.execute(sql_if)
-        foto_anterior = cursor.fetchone()[0]
+        foto_anterior = cursor.fetchone()[0] # selecciono foto que estaba en DB
 
-        os.remove(os.path.join(app.config["UPLOADS"], foto_anterior))
-        sql_if = f'UPDATE empleados SET foto="{nuevo_nombre_foto}" WHERE id="{id_}"'
-        # datos = (nuevo_nombre_foto, id_)
+        borrar_foto_anterior = os.path.join(app.config["UPLOADS"], foto_anterior)
+        print(borrar_foto_anterior)
+
+        os.remove(borrar_foto_anterior)
+
+        sql_if = f'UPDATE empleados SET foto="{nuevo_nombre_foto}" WHERE id={id}'
+        cursor.execute(sql_if)
+        conn.commit()
+
     cursor.execute(sql)
     conn.commit()
 
