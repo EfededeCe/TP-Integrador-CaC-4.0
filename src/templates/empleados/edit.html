@@ -1,0 +1,20 @@
+    {% include "header.html" %}
+
+    <form method="post" action="/update" enctype="multipart/form-data">
+        <input type="text" name="txtId" id="txtId" value="{{ empleado[0] }}" hidden>
+        <br><br>
+        <label for="txtNombre">Nombre:</label>
+        <input type="text" name="txtNombre" id="txtNombre" value="{{ empleado[1] }}">
+        <br><br>
+        <label for="txtCorreo">Correo:</label>
+        <input type="email" name="txtCorreo" id="txtCorreo" value="{{ empleado[2] }}">
+        <br><br>
+        Su foto actual: {{ empleado[3] }}
+        <br><br>
+        <label for="txtFoto">Foto de perfil:</label>
+        <input type="file" name="txtFoto" id="txtFoto" value="{{ empleado[3] }}">
+        <br><br>
+        <input type="submit" value="Modificar empleado">
+    </form>
+
+    {% include "footer.html" %}
