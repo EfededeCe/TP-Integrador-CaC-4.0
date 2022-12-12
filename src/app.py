@@ -1,7 +1,7 @@
 # Activar el entorno virtual => source venv/scripts/activate (windows con una bash shell)
 
 from flask import Flask
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for, send_from_directory
 from flaskext.mysql import MySQL
 from datetime import datetime
 import os
@@ -32,6 +32,12 @@ def index():
     print(empleados)
     conn.commit()
     return render_template("empleados/index.html", empleados=empleados)
+
+
+@app.route('/foto_perfil/<path:nombre_foto>')
+def uploads(nombre_foto):
+    return send_from_directory(os.path.join("uploads"), nombre_foto)
+
 
 @app.route("/create")
 def create():
